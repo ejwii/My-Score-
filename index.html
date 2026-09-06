@@ -14,6 +14,12 @@
   :root{
     --ink:#1c1b19; --paper:#faf8f4; --line:#d9d4c8;
     --accent:#3a5a40; --accent-soft:#e7efe6; --warn:#8a3b2d; --muted:#7a756a;
+    --card-bg:#fff; --warn-soft:#f6e6e1; --line-soft:#efece4;
+  }
+  body.dark{
+    --ink:#f0eee8; --paper:#17171a; --line:#3a3a3f;
+    --accent:#7fb894; --accent-soft:#243228; --warn:#e08c74; --muted:#a3a09a;
+    --card-bg:#232326; --warn-soft:#3a2621; --line-soft:#2e2e32;
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--paper);color:var(--ink);font-family:'Iowan Old Style','Georgia',serif;line-height:1.45;}
@@ -21,12 +27,12 @@
   h1{font-size:1.5rem;font-weight:600;letter-spacing:-0.01em;margin:0 0 2px;}
   h2{font-size:1.15rem;font-weight:600;margin:0 0 14px;}
   .sub{color:var(--muted);font-size:0.92rem;margin:0 0 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
-  .card{background:#fff;border:1px solid var(--line);border-radius:2px;padding:20px;margin-bottom:16px;}
+  .card{background:var(--card-bg);border:1px solid var(--line);border-radius:2px;padding:20px;margin-bottom:16px;}
   label{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.82rem;color:var(--muted);display:block;margin-bottom:4px;}
   input[type=text],input[type=email],input[type=password],input.plain{
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     font-size:1rem;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:4px;
-    background:#fff;color:var(--ink);margin-bottom:14px;
+    background:var(--card-bg);color:var(--ink);margin-bottom:14px;
   }
   input:focus{outline:2px solid var(--accent-soft);border-color:var(--accent);}
   .btn{
@@ -45,13 +51,13 @@
   .topbar .greet{font-size:0.85rem;color:var(--muted);}
   .backlink{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--accent);font-size:0.9rem;cursor:pointer;margin-bottom:14px;display:inline-block;}
 
-  .bar-outer{height:5px;background:#efece4;border-radius:3px;margin-top:8px;overflow:hidden;}
+  .bar-outer{height:5px;background:var(--line-soft);border-radius:3px;margin-top:8px;overflow:hidden;}
   .bar-inner{height:100%;background:var(--accent);transition:width 0.3s ease;}
   .summary-row{display:flex;justify-content:space-between;align-items:baseline;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
   .summary-big{font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;}
   .summary-target{color:var(--muted);font-size:0.85rem;}
 
-  .course{border:1px solid var(--line);border-radius:2px;margin-bottom:14px;overflow:hidden;background:#fff;}
+  .course{border:1px solid var(--line);border-radius:2px;margin-bottom:14px;overflow:hidden;background:var(--card-bg);}
   .course-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
   .course-name{font-weight:600;font-size:1rem;}
   .course-meta{font-size:0.78rem;color:var(--muted);}
@@ -60,7 +66,7 @@
   .course-need{text-align:right;}
   .need-pct{font-size:1.2rem;font-weight:700;font-variant-numeric:tabular-nums;}
   .need-label{font-size:0.7rem;color:var(--muted);}
-  .field-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #efece4;font-size:0.9rem;gap:10px;}
+  .field-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line-soft);font-size:0.9rem;gap:10px;}
   .field-row:last-of-type{border-bottom:none;}
   .field-name{flex:1;min-width:0;}
   .field-weight{color:var(--muted);font-size:0.78rem;display:block;}
@@ -77,13 +83,30 @@
   .add-row input{margin-bottom:0;}
   .add-row input.name{flex:2;}
   .add-row input.num{flex:1;}
-  .archive-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #efece4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.9rem;}
+  .archive-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-soft);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.9rem;}
   .archive-row:last-child{border-bottom:none;}
   .spinner{font-family:-apple-system,sans-serif;color:var(--muted);font-size:0.9rem;text-align:center;padding:40px 0;}
   footer{text-align:center;color:var(--muted);font-size:0.75rem;margin-top:30px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+
+  #themeToggle{
+    position:fixed;top:14px;right:14px;z-index:100;
+    width:38px;height:38px;border-radius:50%;
+    background:var(--card-bg);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:1.1rem;
+  }
+  .pw-wrap{position:relative;}
+  .pw-wrap input{padding-right:44px;}
+  .pw-toggle{
+    position:absolute;right:10px;top:50%;transform:translateY(-50%);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:0.76rem;color:var(--accent);cursor:pointer;user-select:none;
+    margin-top:-7px;
+  }
 </style>
 </head>
 <body>
+<div id="themeToggle" title="Toggle dark mode">🌙</div>
 <div class="wrap" id="app"><div class="spinner">Loading…</div></div>
 
 <script>
@@ -108,6 +131,21 @@ const db = firebase.firestore();
    users/{uid}                -> { name, overallTarget, goalsEnabled, courses:[...] }  (live working data)
    users/{uid}/archives/{id}  -> { name, savedAt, overallTarget, goalsEnabled, courses:[...] } (saved snapshots)
 */
+
+/* ---------- theme (dark mode) ---------- */
+(function initTheme(){
+  const saved = localStorage.getItem('myscore_theme');
+  if(saved==='dark'){ document.body.classList.add('dark'); }
+  updateThemeIcon();
+})();
+function updateThemeIcon(){
+  document.getElementById('themeToggle').textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+}
+document.getElementById('themeToggle').onclick = ()=>{
+  document.body.classList.toggle('dark');
+  localStorage.setItem('myscore_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  updateThemeIcon();
+};
 
 /* ---------- app state ---------- */
 let currentUser = null;   // firebase auth user object
@@ -215,12 +253,21 @@ function renderAuth(mode){
       <label>Email</label>
       <input type="email" id="authEmail" placeholder="you@example.com">
       <label>Password</label>
-      <input type="password" id="authPassword" placeholder="••••••••">
+      <div class="pw-wrap">
+        <input type="password" id="authPassword" placeholder="••••••••">
+        <span class="pw-toggle" id="pwToggle">show</span>
+      </div>
       <button class="btn" id="authSubmit">${mode==='login' ? 'Log in' : 'Sign up'}</button>
       <div class="link" id="authSwitch">${mode==='login' ? "No account? Sign up" : "Already have an account? Log in"}</div>
     </div>
     <footer>Connected to Firebase — your account and marks are stored securely under your login.</footer>
   `;
+  document.getElementById('pwToggle').onclick = ()=>{
+    const inp = document.getElementById('authPassword');
+    const isHidden = inp.type==='password';
+    inp.type = isHidden ? 'text' : 'password';
+    document.getElementById('pwToggle').textContent = isHidden ? 'hide' : 'show';
+  };
   document.getElementById('authSwitch').onclick = ()=> renderAuth(mode==='login' ? 'signup' : 'login');
   document.getElementById('authSubmit').onclick = ()=>{
     const email = document.getElementById('authEmail').value.trim();
@@ -252,6 +299,9 @@ function renderVerifyEmail(){
       <h2>Verify your email</h2>
       <p style="font-family:-apple-system,sans-serif;font-size:0.9rem;color:var(--ink);">
         We sent a verification link to <strong>${currentUser.email}</strong>. Open it, then come back and tap below.
+      </p>
+      <p style="font-family:-apple-system,sans-serif;font-size:0.82rem;color:var(--muted);">
+        Didn't get it? Check your spam or junk folder — verification emails sometimes land there.
       </p>
       <div id="verifyNotice" class="notice" style="display:none;"></div>
       <button class="btn" id="checkVerifiedBtn">I've verified — continue</button>
@@ -391,7 +441,7 @@ function renderDashboard(){
 
   document.getElementById('deleteDataBtn').onclick = ()=>{
     document.getElementById('deleteDataConfirm').innerHTML = `
-      <div class="card" style="border-color:var(--warn);background:#f6e6e1;margin-top:8px;">
+      <div class="card" style="border-color:var(--warn);background:var(--warn-soft);margin-top:8px;">
         <div style="font-family:-apple-system,sans-serif;font-size:0.88rem;color:var(--ink);margin-bottom:10px;">
           This permanently deletes your account and all course data, including saved records. This can't be undone.
         </div>
@@ -691,7 +741,7 @@ function renderCourseDetail(courseId){
     const hasRealMarks = courseStatus(course).knownWeight > 0;
     if(!hasRealMarks){
       document.getElementById('clearMarksConfirm').innerHTML = `
-        <div class="card" style="border-color:var(--warn);background:#f6e6e1;margin-bottom:10px;">
+        <div class="card" style="border-color:var(--warn);background:var(--warn-soft);margin-bottom:10px;">
           <div style="font-family:-apple-system,sans-serif;font-size:0.86rem;color:var(--ink);margin-bottom:10px;">
             No marks are entered yet — locking now would record a final result of 0%, which will drag down what your other courses need.
           </div>
@@ -711,7 +761,7 @@ function renderCourseDetail(courseId){
   };
   document.getElementById('clearMarksBtn').onclick = ()=>{
     document.getElementById('clearMarksConfirm').innerHTML = `
-      <div class="card" style="border-color:var(--warn);background:#f6e6e1;margin-bottom:10px;">
+      <div class="card" style="border-color:var(--warn);background:var(--warn-soft);margin-bottom:10px;">
         <div style="font-family:-apple-system,sans-serif;font-size:0.86rem;color:var(--ink);margin-bottom:10px;">
           This empties every mark in ${course.name} so you can refill them — the components themselves stay exactly as they are.
         </div>
@@ -733,7 +783,7 @@ function renderCourseDetail(courseId){
   };
   document.getElementById('deleteCourseBtn').onclick = ()=>{
     document.getElementById('deleteCourseConfirm').innerHTML = `
-      <div class="card" style="border-color:var(--warn);background:#f6e6e1;margin-top:8px;">
+      <div class="card" style="border-color:var(--warn);background:var(--warn-soft);margin-top:8px;">
         <div style="font-family:-apple-system,sans-serif;font-size:0.88rem;color:var(--ink);margin-bottom:10px;">Delete ${course.name} and all its marks? This can't be undone.</div>
         <div style="display:flex;gap:10px;">
           <button class="btn danger" id="confirmDeleteCourse" style="flex:1;">Yes, delete</button>
@@ -829,14 +879,14 @@ function updateItemComputed(course){
     const currentPct = course.locked ? course.lockedValue : projected;
     let html='';
     if(currentPct!==null && currentPct<50){
-      html += `<div class="card" style="border-color:var(--warn);background:#f6e6e1;">
+      html += `<div class="card" style="border-color:var(--warn);background:var(--warn-soft);">
         <strong style="color:var(--warn);">⚠ Retake risk</strong>
         <div style="font-family:-apple-system,sans-serif;font-size:0.85rem;color:var(--ink);margin-top:4px;">
           ${course.locked ? 'This course is locked' : 'This course is currently tracking'} at ${currentPct.toFixed(0)}% — below the 50% pass mark.
         </div></div>`;
     }
     if(goalsOn && !course.locked && hasRealMarks && targetIsUnsafe(courseTarget)){
-      html += `<div class="card" style="border-color:var(--warn);background:#f6e6e1;">
+      html += `<div class="card" style="border-color:var(--warn);background:var(--warn-soft);">
         <strong style="color:var(--warn);">⚠ Target is below the pass mark</strong>
         <div style="font-family:-apple-system,sans-serif;font-size:0.85rem;color:var(--ink);margin-top:4px;">
           Only ${courseTarget.toFixed(0)}% is mathematically enough for your cumulative — but scoring that here still fails the course. Aim for at least ${PASS_MARK}% specifically in this course.
