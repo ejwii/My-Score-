@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MyScore — semester goal tracker</title>
 
+<!-- App icon / installable app setup -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#3a5a40">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MyScore">
+
 <!-- Firebase compat SDK — same pattern as RISE / eJwi -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -645,15 +656,32 @@ function renderArchives(){
 function renderArchiveDetail(archiveId){
   db.collection('users').doc(currentUser.uid).collection('archives').doc(archiveId).get().then(docSnap=>{
     const a = docSnap.data();
+
+    // credit-weighted cumulative across every course in this saved snapshot —
+    // same method as the live dashboard's "projected cumulative" figure.
+    let totalKnownPoints=0, totalKnownCredits=0;
     const rows = a.courses.map(c=>{
       const proj = courseProjected(c);
       const pct = c.locked ? c.lockedValue : proj;
+      if(pct!==null){ totalKnownPoints += (pct/100)*Number(c.credits||0); totalKnownCredits += Number(c.credits||0); }
       return `<div class="field-row"><div class="field-name">${c.name} <span class="field-weight">${c.credits} credits</span></div><div style="font-weight:600;">${pct!==null?pct.toFixed(1)+'%':'—'}</div></div>`;
     }).join('');
+    const cumulative = totalKnownCredits>0 ? (totalKnownPoints/totalKnownCredits)*100 : null;
+
+    const cumulativeCardHtml = `
+      <div class="card">
+        <div class="summary-row">
+          <div><div class="summary-big">${cumulative!==null?cumulative.toFixed(1)+'%':'—'}</div><div class="summary-target">overall cumulative (credit-weighted)</div></div>
+          ${a.goalsEnabled ? `<div style="text-align:right;"><div class="summary-target">target was ${a.overallTarget}%</div></div>` : ''}
+        </div>
+      </div>
+    `;
+
     app.innerHTML = `
       <div class="backlink" id="backToArchiveList">← back to saved semesters</div>
       <h1>${a.name}</h1>
       <p class="sub">Saved snapshot — read-only.</p>
+      ${cumulativeCardHtml}
       <div class="card">${rows || '<p style="font-family:-apple-system,sans-serif;color:var(--muted);">No courses recorded.</p>'}</div>
     `;
     document.getElementById('backToArchiveList').onclick = renderArchives;
