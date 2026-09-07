@@ -664,7 +664,18 @@ function renderArchiveDetail(archiveId){
       const proj = courseProjected(c);
       const pct = c.locked ? c.lockedValue : proj;
       if(pct!==null){ totalKnownPoints += (pct/100)*Number(c.credits||0); totalKnownCredits += Number(c.credits||0); }
-      return `<div class="field-row"><div class="field-name">${c.name} <span class="field-weight">${c.credits} credits</span></div><div style="font-weight:600;">${pct!==null?pct.toFixed(1)+'%':'—'}</div></div>`;
+      return `
+        <div class="course-head" data-course-id="${c.id}">
+          <div>
+            <div class="course-name">${c.name}</div>
+            <div class="course-meta">${c.credits} credits</div>
+          </div>
+          <div class="course-need">
+            <div class="need-pct">${pct!==null?pct.toFixed(1)+'%':'—'}</div>
+            <div class="need-label">${c.locked?'locked':'result'}</div>
+          </div>
+        </div>
+      `;
     }).join('');
     const cumulative = totalKnownCredits>0 ? (totalKnownPoints/totalKnownCredits)*100 : null;
 
@@ -680,12 +691,51 @@ function renderArchiveDetail(archiveId){
     app.innerHTML = `
       <div class="backlink" id="backToArchiveList">← back to saved semesters</div>
       <h1>${a.name}</h1>
-      <p class="sub">Saved snapshot — read-only.</p>
+      <p class="sub">Saved snapshot — read-only. Tap a lesson for its component breakdown.</p>
       ${cumulativeCardHtml}
       <div class="card">${rows || '<p style="font-family:-apple-system,sans-serif;color:var(--muted);">No courses recorded.</p>'}</div>
     `;
     document.getElementById('backToArchiveList').onclick = renderArchives;
+    document.querySelectorAll('[data-course-id]').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const course = a.courses.find(c=>c.id===el.dataset.courseId);
+        if(course) renderArchiveCourseDetail(archiveId, a, course);
+      });
+    });
   });
+}
+
+function renderArchiveCourseDetail(archiveId, archive, course){
+  const proj = courseProjected(course);
+  const pct = course.locked ? course.lockedValue : proj;
+
+  const itemsHtml = course.items.map(it=>{
+    const hasScore = it.score!==null && it.score!==undefined && it.score!=='';
+    const scoreDisplay = hasScore ? `${it.score}/${it.rawMax}` : '— not entered';
+    return `
+      <div class="field-row">
+        <div class="field-name">${it.name} <span class="field-weight">marked out of ${it.rawMax} · worth ${it.weight}% of course</span></div>
+        <div style="font-weight:600;">${scoreDisplay}</div>
+      </div>
+    `;
+  }).join('');
+
+  app.innerHTML = `
+    <div class="backlink" id="backToArchiveDetail">← back to ${archive.name}</div>
+    <h1>${course.name}</h1>
+    <p class="sub">Saved snapshot — read-only.</p>
+    <div class="card">
+      <div class="summary-row">
+        <div><div class="summary-big">${pct!==null?pct.toFixed(1)+'%':'—'}</div><div class="summary-target">${course.locked?'locked result':'result at time of saving'}</div></div>
+        <div style="text-align:right;">
+          <div class="summary-target">${course.credits} credits</div>
+          ${archive.goalsEnabled && course.targetOverride!=null ? `<div class="summary-target">target was ${course.targetOverride}%</div>` : ''}
+        </div>
+      </div>
+    </div>
+    <div class="card">${itemsHtml || '<p style="font-family:-apple-system,sans-serif;color:var(--muted);">No components recorded.</p>'}</div>
+  `;
+  document.getElementById('backToArchiveDetail').onclick = ()=> renderArchiveDetail(archiveId);
 }
 
 /* ---- Course detail / builder screen ---- */
